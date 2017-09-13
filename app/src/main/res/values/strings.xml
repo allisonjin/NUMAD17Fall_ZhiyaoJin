@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NUMAD17F-ZhiyaoJin</string>
+    <string name="main_title">Zhiyao Jin</string>
+    <string name="about_btn">ABOUT</string>
+    <string name="error_btn">GENERATE ERROR</string>
+    <string name="about_title">About Me</string>
+    <string name="about_name">Zhiyao Jin</string>
+    <string name="about_email">jin.z@husky.neu.edu</string>
+    <string name="about_year">2nd year</string>
+    <string name="about_photo"></string>
+    <string name="about_phone_id">123456</string>
+    <string name="version_code"></string>
+    <string name="version_name"></string>
+</resources>
