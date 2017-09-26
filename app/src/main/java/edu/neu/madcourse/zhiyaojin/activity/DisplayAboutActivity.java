@@ -1,4 +1,4 @@
-package edu.neu.madcourse.zhiyaojin;
+package edu.neu.madcourse.zhiyaojin.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.widget.TextView;
+
+import edu.neu.madcourse.zhiyaojin.R;
 
 public class DisplayAboutActivity extends AppCompatActivity {
 

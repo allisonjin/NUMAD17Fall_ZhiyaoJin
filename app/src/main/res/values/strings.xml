@@ -11,4 +11,6 @@
     <string name="about_phone_id">123456</string>
     <string name="version_code"></string>
     <string name="version_name"></string>
+    <string name="dict_btn">DICTIONARY</string>
+    <string name="dict_title">Test Dictionary</string>
 </resources>
