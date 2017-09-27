@@ -1,5 +1,7 @@
 package edu.neu.madcourse.zhiyaojin.activity;
 
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ public class DictionaryActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String word = s.toString();
                 if (s.length() >= WORD_MIN_LENGTH && helper.wordExists(word)) {
+                    beep();
                     updateEnteredWords(word);
                 }
             }
@@ -50,6 +53,11 @@ public class DictionaryActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void beep() {
+        ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        toneGenerator.startTone(ToneGenerator.TONE_CDMA_PIP, 200);
     }
 
     private void updateEnteredWords(String word) {
