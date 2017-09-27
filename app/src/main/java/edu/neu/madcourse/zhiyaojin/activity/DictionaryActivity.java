@@ -1,19 +1,25 @@
 package edu.neu.madcourse.zhiyaojin.activity;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import edu.neu.madcourse.zhiyaojin.R;
-import edu.neu.madcourse.zhiyaojin.dictionary.DictionaryDB;
+import edu.neu.madcourse.zhiyaojin.dictionary.DictionaryDBHelper;
+import edu.neu.madcourse.zhiyaojin.fragment.AcknowledgmentDialogFragment;
 
 public class DictionaryActivity extends AppCompatActivity {
-    private DictionaryDB dictionaryDB;
+    private static final int WORD_MIN_LENGTH = 3;
 
-    private TextView searchEditText;
+    private DictionaryDBHelper helper;
+
+    private EditText searchEditText;
+    private TextView enteredWordsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,19 +27,21 @@ public class DictionaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dictionary);
         getSupportActionBar().setTitle(R.string.dict_title);
 
-        dictionaryDB = new DictionaryDB(getApplicationContext());
+        helper = new DictionaryDBHelper(getApplicationContext());
+        searchEditText = (EditText)findViewById(R.id.dict_search);
+        enteredWordsTextView = (TextView)findViewById(R.id.dict_entered_words);
 
-        searchEditText = (TextView)findViewById(R.id.dict_search);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() >= 3) {
-                    Log.i("test", s.toString() + " exists: " + dictionaryDB.wordExists(s.toString()));
+                String word = s.toString();
+                if (s.length() >= WORD_MIN_LENGTH && helper.wordExists(word)) {
+                    updateEnteredWords(word);
                 }
             }
 
@@ -42,5 +50,25 @@ public class DictionaryActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void updateEnteredWords(String word) {
+        String text = word + "\n" + enteredWordsTextView.getText();
+        enteredWordsTextView.setText(text);
+    }
+
+    public void clear(View view) {
+        searchEditText.setText("");
+        enteredWordsTextView.setText("");
+    }
+
+    public void displayAcknowledgment(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        AcknowledgmentDialogFragment dialog = new AcknowledgmentDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("source", getString(R.string.source_assignment2));
+        dialog.setArguments(bundle);
+        dialog.setRetainInstance(true);
+        dialog.show(fm, "acknowledgment");
     }
 }

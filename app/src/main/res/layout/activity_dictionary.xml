@@ -8,16 +8,69 @@
 
     <EditText
         android:id="@+id/dict_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="221dp"
+        android:layout_height="44dp"
         android:ems="10"
         android:inputType="textPersonName"
         tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="12dp" />
+
+    <TextView
+        android:id="@+id/dict_entered_words"
+        android:layout_width="0dp"
+        android:layout_height="317dp"
+        android:layout_marginTop="9dp"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/dict_search"
+        app:layout_constraintRight_toRightOf="@+id/dict_search"
+        app:layout_constraintTop_toBottomOf="@+id/dict_search"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <Button
+        android:id="@+id/dict_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="42dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="42dp"
+        android:layout_marginStart="23dp"
+        android:onClick="clear"
+        android:text="@string/dict_clear"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dict_search"
+        app:layout_constraintLeft_toRightOf="@+id/dict_search"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintHorizontal_bias="1.0" />
+
+    <Button
+        android:id="@+id/dict_acknowledge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:onClick="displayAcknowledgment"
+        android:text="@string/dict_acknowledge"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/dict_search"
+        app:layout_constraintRight_toRightOf="@+id/dict_clear"
+        app:layout_constraintTop_toBottomOf="@+id/dict_entered_words"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp" />
 
 </android.support.constraint.ConstraintLayout>
