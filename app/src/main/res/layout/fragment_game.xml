@@ -1,0 +1,27 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="edu.neu.madcourse.zhiyaojin.fragment.GameFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/game_title" />
+    
+    <Button
+        android:id="@+id/new_game_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_game_btn"/>
+
+    <Button
+        android:id="@+id/game_acknowledgment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/acknowledgment_btn"/>
+
+</LinearLayout>

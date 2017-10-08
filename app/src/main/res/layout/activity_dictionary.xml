@@ -60,7 +60,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:onClick="displayAcknowledgment"
-        android:text="@string/dict_acknowledge"
+        android:text="@string/acknowledgment_btn"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/dict_search"
         app:layout_constraintRight_toRightOf="@+id/dict_clear"

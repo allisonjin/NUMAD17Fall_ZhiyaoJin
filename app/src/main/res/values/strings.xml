@@ -1,21 +1,21 @@
 <resources>
     <string name="app_name">NUMAD17F-ZhiyaoJin</string>
     <string name="main_title">Zhiyao Jin</string>
-    <string name="about_btn">ABOUT</string>
-    <string name="error_btn">GENERATE ERROR</string>
-    <string name="dict_btn">DICTIONARY</string>
+    <string name="about_btn">About</string>
+    <string name="error_btn">Generate Error</string>
+    <string name="dict_btn">Dictionary</string>
+    <string name="game_btn">Word Game</string>
 
     <string name="about_title">About Me</string>
     <string name="about_name">Zhiyao Jin</string>
     <string name="about_email">jin.z@husky.neu.edu</string>
     <string name="about_year">2nd year</string>
-    <string name="about_photo"></string>
     <string name="about_phone_id">123456</string>
 
     <string name="dict_title">Test Dictionary</string>
     <string name="dict_clear">Clear</string>
-    <string name="dict_acknowledge">Acknowledgment</string>
 
+    <string name="acknowledgment_btn">Acknowledgment</string>
     <string name="acknowledgment_title">Acknowledgment</string>
     <string name="acknowledgment_source">Source:</string>
     <string name="source_assignment2">https://github.com/android/platform_development
@@ -23,5 +23,8 @@
         /DictionaryDatabase.java</string>
 
     <string name="btn_ok">OK</string>
+
+    <string name="game_title">Scroggle Game</string>
+    <string name="new_game_btn">New Game</string>
 
 </resources>
