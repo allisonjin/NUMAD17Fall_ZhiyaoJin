@@ -10,14 +10,6 @@ import android.view.ViewGroup;
 
 import edu.neu.madcourse.zhiyaojin.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GameFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GameFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -33,4 +33,8 @@ public class MainActivity extends AppCompatActivity {
     public void displayDictionary(View view) {
         startActivity(new Intent(this, DictionaryActivity.class));
     }
+
+    public void displayWordGame(View view) {
+        startActivity(new Intent(this, ScroggleActivity.class));
+    }
 }

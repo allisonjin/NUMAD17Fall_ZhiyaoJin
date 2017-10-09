@@ -74,7 +74,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="144dp"
-        android:onClick=""
+        android:onClick="displayWordGame"
         android:text="@string/game_btn"
         android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0.0"
