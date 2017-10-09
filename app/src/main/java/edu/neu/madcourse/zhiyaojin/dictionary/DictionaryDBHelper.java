@@ -20,10 +20,6 @@ import java.util.List;
 import edu.neu.madcourse.zhiyaojin.BuildConfig;
 import edu.neu.madcourse.zhiyaojin.R;
 
-/**
- * Created by allisonjin on 9/25/17.
- */
-
 public class DictionaryDBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DictionaryDBHelper";
 
@@ -138,6 +134,24 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         String[] selectionArgs = new String[]{word};
         return mSQLiteDatabase.query(TABLE_NAME,
                 columns, selection, selectionArgs, null, null, null);
+    }
+
+    private Cursor queryByLength(int length) {
+        String sql = "SELECT " + WORD + " FROM " + TABLE_NAME
+                + " WHERE LENGTH(" + "WORD" +")=" + length;
+        return mSQLiteDatabase.rawQuery(sql, null);
+    }
+
+    public List<String> getWordsByLength(int length) {
+        List<String> words = new ArrayList<>();
+        Cursor cursor = queryByLength(length);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            words.add(cursor.getString(0));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return words;
     }
 
     @Override

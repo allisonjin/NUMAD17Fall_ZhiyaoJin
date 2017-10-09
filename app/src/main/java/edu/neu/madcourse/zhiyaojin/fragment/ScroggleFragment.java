@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import edu.neu.madcourse.zhiyaojin.R;
 import edu.neu.madcourse.zhiyaojin.dictionary.DictionaryDBHelper;
+import edu.neu.madcourse.zhiyaojin.game.BoggleBoardGenerator;
 import edu.neu.madcourse.zhiyaojin.game.Tile;
 
 public class ScroggleFragment extends Fragment {
@@ -20,9 +21,11 @@ public class ScroggleFragment extends Fragment {
     private static int mSmallIds[] = {R.id.small1, R.id.small2, R.id.small3,
             R.id.small4, R.id.small5, R.id.small6, R.id.small7, R.id.small8,
             R.id.small9,};
+    private final static int BOARD_SIZE = 3;
 
     private static String[] testWord = {"c", "o", "m", "t", "u", "p", "e", "r", "s"};
     private final DictionaryDBHelper dbHelper;
+    private final BoggleBoardGenerator boardGenerator;
 
     private Tile mEntireBoard = new Tile(this);
     private Tile[] mLargeTiles = new Tile[9];
@@ -33,6 +36,7 @@ public class ScroggleFragment extends Fragment {
 
     public ScroggleFragment() {
         dbHelper = new DictionaryDBHelper(getContext());
+        boardGenerator = new BoggleBoardGenerator(dbHelper, BOARD_SIZE);
     }
 
     @Override
@@ -83,9 +87,10 @@ public class ScroggleFragment extends Fragment {
         // Create all the tiles
         for (int large = 0; large < 9; large++) {
             mLargeTiles[large] = new Tile(this);
+            char[] board = boardGenerator.getRandomBoard();
             for (int small = 0; small < 9; small++) {
                 Tile tile = new Tile(this);
-                tile.setValue(testWord[small]);
+                tile.setValue(String.valueOf(board[small]));
                 mSmallTiles[large][small] = tile;
             }
             mLargeTiles[large].setSubTiles(mSmallTiles[large]);
