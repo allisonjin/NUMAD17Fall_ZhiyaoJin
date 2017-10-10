@@ -1,6 +1,5 @@
 package edu.neu.madcourse.zhiyaojin.game;
 
-
 import android.util.Log;
 
 import java.util.ArrayList;

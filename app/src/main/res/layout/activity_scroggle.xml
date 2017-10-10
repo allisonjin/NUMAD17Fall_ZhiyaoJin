@@ -29,10 +29,16 @@
 
         <Button
             android:id="@+id/submit_btn"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="submitWord"
-            android:text="Button" />
+            android:text="Submit Test" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="startPhase2"
+            android:text="Phase 2 Test" />
 
     </LinearLayout>
 

@@ -23,4 +23,8 @@ public class ScroggleActivity extends AppCompatActivity {
     public void submitWord(View view) {
         mScroggleFragment.submitWord();
     }
+
+    public void startPhase2(View view) {
+        mScroggleFragment.startPhase2();
+    }
 }

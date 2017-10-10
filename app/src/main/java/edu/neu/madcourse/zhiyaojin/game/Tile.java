@@ -21,7 +21,7 @@ public class Tile {
     private final ScroggleFragment mScroggle;
     private State mState = State.UNSELECTED;
     private View mView;
-    private String value;
+    private String value = "";
     private Tile[] mSubTiles;
 
     public Tile(ScroggleFragment scroggle) {
@@ -83,7 +83,7 @@ public class Tile {
     }
 
     public boolean isAvailable() {
-        return !(mState == State.DISABLED);
+        return mState != State.DISABLED;
     }
 
     public boolean isSelected() {
@@ -92,6 +92,10 @@ public class Tile {
 
     public void blank() {
         value = "";
+    }
+
+    public boolean isBlank() {
+        return value.length() == 0;
     }
 
     public void updateDrawableState() {

@@ -22,8 +22,9 @@ public class ScroggleFragment extends Fragment {
             R.id.small4, R.id.small5, R.id.small6, R.id.small7, R.id.small8,
             R.id.small9,};
     private final static int BOARD_SIZE = 3;
+    private final static String PHASE_1 = "phase1";
+    private final static String PHASE_2 = "phase2";
 
-    private static String[] testWord = {"c", "o", "m", "t", "u", "p", "e", "r", "s"};
     private final DictionaryDBHelper dbHelper;
     private final BoggleBoardGenerator boardGenerator;
 
@@ -33,6 +34,8 @@ public class ScroggleFragment extends Fragment {
     private String word = "";
     private int mLastLarge;
     private int mLastSmall;
+
+    private String phase = PHASE_1;
 
     public ScroggleFragment() {
         dbHelper = new DictionaryDBHelper(getContext());
@@ -71,7 +74,9 @@ public class ScroggleFragment extends Fragment {
         for (Tile largeTile : mLargeTiles) {
             if (largeTile.isAvailable()) {
                 for (Tile smallTile : largeTile.getSubTiles()) {
-                    smallTile.enable();
+                    if (!smallTile.isAvailable()) {
+                        smallTile.enable();
+                    }
                 }
             }
         }
@@ -116,8 +121,7 @@ public class ScroggleFragment extends Fragment {
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (nextMoveAvailable(fSmall) && smallTile.isAvailable()) {
-//                            Log.i("click", "" + fLarge + " " + fSmall);
+                        if (nextMoveAvailable(fLarge, fSmall)) {
                             makeMove(fLarge, fSmall);
                         }
                     }
@@ -127,9 +131,47 @@ public class ScroggleFragment extends Fragment {
         }
     }
 
-    private boolean nextMoveAvailable(int small) {
+    // refactor
+    public void startPhase2() {
+        phase = PHASE_2;
+        clearTiles();
+        enableLargeTiles();
+        enableTiles();
+        updateAllTiles();
+    }
+
+    private void enableLargeTiles() {
+        for (Tile tile : mLargeTiles) {
+            tile.enable();
+        }
+    }
+
+    private void clearTiles() {
+        for (int i = 0; i < 9; i++) {
+            Tile largeTile = mLargeTiles[i];
+            if (largeTile.isAvailable()) {
+                removeSmallTiles(i);
+            }
+        }
+    }
+
+    private void removeSmallTiles(int large) {
+        for (Tile tile : mSmallTiles[large]) {
+            tile.blank();
+            tile.enable();
+        }
+    }
+
+    private boolean nextMoveAvailable(int large, int small) {
+        if (phase == PHASE_2) {
+            return true;
+        }
         if (mLastLarge == -1) {
             return true;
+        }
+        Tile tile = mSmallTiles[large][small];
+        if (tile.isSelected() || !tile.isAvailable() || tile.isBlank()) {
+            return false;
         }
         int row = small / 3;
         int col = small - 3 * row;
@@ -142,20 +184,34 @@ public class ScroggleFragment extends Fragment {
     private void makeMove(int large, int small) {
         Tile tile = mSmallTiles[large][small];
         word += tile.getValue();
-        tile.setState(Tile.State.SELECTED);
-        disableFromMove(large);
+        tile.setState(Tile.State.SELECTED); //refactor
+        disableFromMove(large, small);
+        Log.i("state", tile.getState().toString());
         mLastLarge = large;
         mLastSmall = small;
         updateAllTiles();
     }
 
-    private void disableFromMove(int large) {
+    private void disableFromMove(int large, int small) {
+        if (phase == PHASE_2) {
+            disableFromMovePhase2(large, small);
+            return;
+        }
         if (mLastLarge != -1) {
             return;
         }
         for (int i = 0; i < 9; i++) {
             if (i != large) {
                 disableTiles(mSmallTiles[i]);
+            }
+        }
+    }
+
+    private void disableFromMovePhase2(int large, int small) {
+        enableTiles();
+        for (int i = 0; i < 9; i++) {
+            if (i != small) {
+                disableTiles(mSmallTiles[large][i]);
             }
         }
     }
@@ -173,23 +229,48 @@ public class ScroggleFragment extends Fragment {
             return;
         }
         if (dbHelper.wordExists(word)) {
-            removeUnselectedTiles();
-            disableLargeTile(mLargeTiles[mLastLarge]);
+            if (phase == PHASE_2) {
+                removeSelectedSmallTiles();
+            } else {
+                removeUnselectedSmallTiles(mLastLarge);
+                disableLargeTile(mLargeTiles[mLastLarge]);
+            }
         } else {
             // penalize
         }
         enableTiles();
+        unselectAllTiles();
         resetLastMove();
         updateAllTiles();
         word = "";
     }
 
-    private void removeUnselectedTiles() {
-        for (Tile tile : mSmallTiles[mLastLarge]) {
+    private void unselectAllTiles() {
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                Tile smallTile = mSmallTiles[large][small];
+                if (smallTile.isSelected()) {
+                    mSmallTiles[large][small].enable();
+                }
+            }
+        }
+    }
+
+    private void removeUnselectedSmallTiles(int large) {
+        for (Tile tile : mSmallTiles[large]) {
             if (!tile.isSelected()) {
                 tile.blank();
             }
         }
     }
 
+    private void removeSelectedSmallTiles() {
+        for (Tile[] tiles : mSmallTiles) {
+            for (Tile tile : tiles) {
+                if (tile.isSelected()) {
+                    tile.blank();
+                }
+            }
+        }
+    }
 }
