@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".activity.DisplayAboutActivity" />
         <activity android:name=".activity.DictionaryActivity" />
-        <activity android:name=".activity.GameActivity" />
+        <activity android:name=".activity.GameMenuActivity" />
         <activity android:name=".activity.ScroggleActivity"></activity>
     </application>
 

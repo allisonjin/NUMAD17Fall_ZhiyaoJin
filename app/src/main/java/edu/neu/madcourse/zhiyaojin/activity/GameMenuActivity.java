@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import edu.neu.madcourse.zhiyaojin.R;
 
-public class GameActivity extends AppCompatActivity {
+public class GameMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_game_menu);
     }
 }

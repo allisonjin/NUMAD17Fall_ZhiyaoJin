@@ -35,6 +35,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayWordGame(View view) {
-        startActivity(new Intent(this, ScroggleActivity.class));
+        startActivity(new Intent(this, GameMenuActivity.class));
     }
 }

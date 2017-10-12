@@ -9,36 +9,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:padding="@dimen/game_padding"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
+
+         <!--Control fragment goes here... -->
+        <fragment
+            android:id="@+id/fragment_game_controls"
+            class="edu.neu.madcourse.zhiyaojin.fragment.ControlFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_control" />
 
         <fragment
             android:id="@+id/fragment_scroggle"
             class="edu.neu.madcourse.zhiyaojin.fragment.ScroggleFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:layout="@layout/fragment_scroggle"/>
-
-        <!-- Control fragment goes here... -->
-        <!--<fragment-->
-            <!--android:id="@+id/fragment_game_controls"-->
-            <!--class="edu.neu.madcourse.zhiyaojin.fragment.ControlFragment"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--tools:layout="@layout/fragment_control"/>-->
-
-        <Button
-            android:id="@+id/submit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="submitWord"
-            android:text="Submit Test" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startPhase2"
-            android:text="Phase 2 Test" />
+            tools:layout="@layout/fragment_scroggle" />
 
     </LinearLayout>
 

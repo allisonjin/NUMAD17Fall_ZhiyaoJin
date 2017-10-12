@@ -9,19 +9,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import edu.neu.madcourse.zhiyaojin.R;
+import edu.neu.madcourse.zhiyaojin.activity.ScroggleActivity;
 import edu.neu.madcourse.zhiyaojin.dictionary.DictionaryDBHelper;
 import edu.neu.madcourse.zhiyaojin.game.BoggleBoardGenerator;
 import edu.neu.madcourse.zhiyaojin.game.Tile;
 
 public class ScroggleFragment extends Fragment {
 
-    private static int mLargeIds[] = {R.id.large1, R.id.large2, R.id.large3,
+    private static int[] mLargeIds = {R.id.large1, R.id.large2, R.id.large3,
             R.id.large4, R.id.large5, R.id.large6, R.id.large7, R.id.large8,
             R.id.large9,};
-    private static int mSmallIds[] = {R.id.small1, R.id.small2, R.id.small3,
+    private static int[] mSmallIds = {R.id.small1, R.id.small2, R.id.small3,
             R.id.small4, R.id.small5, R.id.small6, R.id.small7, R.id.small8,
             R.id.small9,};
+    private static int[] scores = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1,
+            1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+
     private final static int BOARD_SIZE = 3;
+    private final static int WORD_LENGTH = BOARD_SIZE * BOARD_SIZE;
+    private final static int BONUS = 10;
     private final static String PHASE_1 = "phase1";
     private final static String PHASE_2 = "phase2";
 
@@ -32,6 +38,7 @@ public class ScroggleFragment extends Fragment {
     private Tile[] mLargeTiles = new Tile[9];
     private Tile[][] mSmallTiles = new Tile[9][9];
     private String word = "";
+    private int totalPoints = 0;
     private int mLastLarge;
     private int mLastSmall;
 
@@ -131,13 +138,12 @@ public class ScroggleFragment extends Fragment {
         }
     }
 
-    // refactor
+    // refactoring
     public void startPhase2() {
         phase = PHASE_2;
         clearTiles();
         enableLargeTiles();
-        enableTiles();
-        updateAllTiles();
+        clearSelectedWord();
     }
 
     private void enableLargeTiles() {
@@ -163,13 +169,14 @@ public class ScroggleFragment extends Fragment {
     }
 
     private boolean nextMoveAvailable(int large, int small) {
+        Tile tile = mSmallTiles[large][small];
+
         if (phase == PHASE_2) {
-            return true;
+            return large != mLastLarge && !tile.isBlank();
         }
         if (mLastLarge == -1) {
             return true;
         }
-        Tile tile = mSmallTiles[large][small];
         if (tile.isSelected() || !tile.isAvailable() || tile.isBlank()) {
             return false;
         }
@@ -186,10 +193,14 @@ public class ScroggleFragment extends Fragment {
         word += tile.getValue();
         tile.setState(Tile.State.SELECTED); //refactor
         disableFromMove(large, small);
-        Log.i("state", tile.getState().toString());
         mLastLarge = large;
         mLastSmall = small;
         updateAllTiles();
+        updateWordDisplay();
+
+        if (phase == PHASE_2) {
+            tile.enable();
+        }
     }
 
     private void disableFromMove(int large, int small) {
@@ -224,11 +235,20 @@ public class ScroggleFragment extends Fragment {
         }
     }
 
+    private void updateWordDisplay() {
+        ((ScroggleActivity)getActivity()).updateWord(word);
+    }
+
+    private void updatePointsDisplay() {
+        ((ScroggleActivity)getActivity()).updatePoints(totalPoints);
+    }
+
     public void submitWord() {
         if (word.length() == 0) {
             return;
         }
         if (dbHelper.wordExists(word)) {
+            totalPoints += getPointsOfWord(word);
             if (phase == PHASE_2) {
                 removeSelectedSmallTiles();
             } else {
@@ -236,13 +256,35 @@ public class ScroggleFragment extends Fragment {
                 disableLargeTile(mLargeTiles[mLastLarge]);
             }
         } else {
-            // penalize
+            totalPoints = totalPoints > 5 ? totalPoints - 5 : 0;
         }
+        clearSelectedWord();
+        updatePointsDisplay();
+    }
+
+    public void clearSelectedWord() {
+        resetWord();
         enableTiles();
         unselectAllTiles();
-        resetLastMove();
+        updateWordDisplay();
         updateAllTiles();
+        resetLastMove();
+    }
+
+    private void resetWord() {
         word = "";
+    }
+
+    private int getPointsOfWord(String word) {
+        char[] chs = word.toCharArray();
+        int score = 0;
+        for (char c : chs) {
+            score += scores[c - 'a'];
+        }
+        if (word.length() == WORD_LENGTH) {
+            score += BONUS;
+        }
+        return score;
     }
 
     private void unselectAllTiles() {
