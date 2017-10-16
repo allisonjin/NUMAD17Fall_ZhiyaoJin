@@ -1,9 +1,7 @@
 package edu.neu.madcourse.zhiyaojin.fragment;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -79,24 +77,33 @@ public class ScroggleFragment extends Fragment {
     private void disableTiles(Tile... tiles) {
         for (Tile t : tiles) {
             t.disable();
+            if (t.getSubTiles() != null) {
+                disableTiles(t.getSubTiles());
+            }
         }
-    }
-
-    private void disableLargeTile(Tile tile) {
-        tile.disable();
-        disableTiles(tile.getSubTiles());
     }
 
     private void enableTiles() {
         for (Tile largeTile : mLargeTiles) {
             if (largeTile.isAvailable()) {
-                for (Tile smallTile : largeTile.getSubTiles()) {
-                    if (!smallTile.isAvailable()) {
-                        smallTile.enable();
-                    }
-                }
+                enableTiles(largeTile);
             }
         }
+    }
+
+    private void enableTiles(Tile... tiles) {
+        for (Tile tile : tiles) {
+            if (!tile.isAvailable()) {
+                tile.enable();
+            }
+            if (tile.getSubTiles() != null) {
+                enableTiles(tile.getSubTiles());
+            }
+        }
+    }
+
+    private boolean isPhase2() {
+        return phase.equals(PHASE_2);
     }
 
     private void resetLastMove() {
@@ -128,13 +135,12 @@ public class ScroggleFragment extends Fragment {
             mLargeTiles[large].setView(outer);
 
             for (int small = 0; small < 9; small++) {
-                Button inner = (Button) outer.findViewById
-                        (mSmallIds[small]);
+                Button inner = outer.findViewById(mSmallIds[small]);
                 final int fLarge = large;
                 final int fSmall = small;
                 final Tile smallTile = mSmallTiles[large][small];
                 smallTile.setView(inner);
-                // ...
+
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -144,7 +150,6 @@ public class ScroggleFragment extends Fragment {
                         }
                     }
                 });
-                // ...
             }
         }
     }
@@ -157,40 +162,27 @@ public class ScroggleFragment extends Fragment {
         return totalPoints;
     }
 
-    // refactoring
     public void startPhase2() {
         phase = PHASE_2;
-        clearTiles();
-        enableLargeTiles();
-        clearSelectedWord();
+        blankUnsolvedTiles();
+        enableTiles(mLargeTiles);
+        clearSelections();
     }
 
-    private void enableLargeTiles() {
-        for (Tile tile : mLargeTiles) {
-            tile.enable();
-        }
-    }
-
-    private void clearTiles() {
-        for (int i = 0; i < 9; i++) {
-            Tile largeTile = mLargeTiles[i];
+    private void blankUnsolvedTiles() {
+        for (Tile largeTile : mLargeTiles) {
             if (largeTile.isAvailable()) {
-                removeSmallTiles(i);
+                for (Tile tile : largeTile.getSubTiles()) {
+                    tile.blank();
+                }
             }
-        }
-    }
-
-    private void removeSmallTiles(int large) {
-        for (Tile tile : mSmallTiles[large]) {
-            tile.blank();
-            tile.enable();
         }
     }
 
     private boolean nextMoveAvailable(int large, int small) {
         Tile tile = mSmallTiles[large][small];
 
-        if (phase == PHASE_2) {
+        if (isPhase2()) {
             return large != mLastLarge && !tile.isBlank();
         }
         if (mLastLarge == -1) {
@@ -219,7 +211,7 @@ public class ScroggleFragment extends Fragment {
     }
 
     private void disableFromMove(int large, int small) {
-        if (phase == PHASE_2) {
+        if (isPhase2()) {
             disableFromMovePhase2(large, small);
             return;
         }
@@ -268,26 +260,26 @@ public class ScroggleFragment extends Fragment {
             totalPoints += getPointsOfWord(word);
             playWordFoundSound();
             showMessage("Word Found!");
-            if (phase == PHASE_2) {
+            if (isPhase2()) {
                 removeSelectedSmallTiles();
             } else {
                 removeUnselectedSmallTiles(mLastLarge);
-                disableLargeTile(mLargeTiles[mLastLarge]);
+                disableTiles(mLargeTiles[mLastLarge]);
             }
         } else {
             totalPoints = totalPoints > 5 ? totalPoints - 5 : 0;
             showMessage(word.toUpperCase() + " Is Not A Word!");
             playWrongWordSound();
         }
-        clearSelectedWord();
+        clearSelections();
         updatePointsDisplay();
     }
 
-    public void clearSelectedWord() {
+    public void clearSelections() {
         resetWord();
+        updateWordDisplay();
         enableTiles();
         unselectAllTiles();
-        updateWordDisplay();
         updateAllTiles();
         resetLastMove();
     }

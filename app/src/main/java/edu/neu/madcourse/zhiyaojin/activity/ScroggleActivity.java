@@ -38,7 +38,7 @@ public class ScroggleActivity extends AppCompatActivity {
         mMediaPlayer.setLooping(true);
         mMediaPlayer.start();
 
-        mCountDownTimer = new CountDownTimerPausable(40000);
+        mCountDownTimer = new CountDownTimerPausable(90000);
         mCountDownTimer.start();
     }
 
@@ -64,13 +64,13 @@ public class ScroggleActivity extends AppCompatActivity {
     }
 
     public void clearSelectedWord() {
-        mScroggleFragment.clearSelectedWord();
+        mScroggleFragment.clearSelections();
     }
 
     public void startPhase2() {
         phase1 = false;
         mScroggleFragment.startPhase2();
-        mCountDownTimer.reset(40000);
+        mCountDownTimer.reset(90000);
         mCountDownTimer.start();
     }
 

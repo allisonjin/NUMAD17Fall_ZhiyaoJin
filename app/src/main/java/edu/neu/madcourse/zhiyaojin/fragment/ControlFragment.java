@@ -20,6 +20,9 @@ public class ControlFragment extends Fragment {
     private TextView wordTextView;
     private TextView timerTextView;
     private TextView pointsTextView;
+    private ImageButton pauseButton;
+    private ImageButton musicButton;
+    private ImageButton infoButton;
     private boolean gameRunning = true;
     private boolean musicPlaying = true;
 
@@ -43,9 +46,9 @@ public class ControlFragment extends Fragment {
 
         ImageButton submitButton = rootView.findViewById(R.id.word_submit_btn);
         ImageButton cancelButton = rootView.findViewById(R.id.word_cancel_btn);
-        final ImageButton pauseButton = rootView.findViewById(R.id.pause_btn);
-        final ImageButton musicButton = rootView.findViewById(R.id.music_btn);
-        ImageButton infoButton = rootView.findViewById(R.id.game_info_btn);
+        pauseButton = rootView.findViewById(R.id.pause_btn);
+        musicButton = rootView.findViewById(R.id.music_btn);
+        infoButton = rootView.findViewById(R.id.game_info_btn);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,14 +68,7 @@ public class ControlFragment extends Fragment {
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (gameRunning) {
-                    ((ScroggleActivity)getActivity()).pauseGame();
-                } else {
-                    ((ScroggleActivity)getActivity()).resumeGame();
-                }
-                toggleButton(pauseButton, gameRunning);
-
-                gameRunning = !gameRunning;
+                toggleGamePause();
             }
         });
 
@@ -92,7 +88,9 @@ public class ControlFragment extends Fragment {
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ScroggleActivity)getActivity()).pauseGame();
+                if (gameRunning) {
+                    toggleGamePause();
+                }
                 String instructions = new StringBuilder()
                         .append("Scroggle game has two phases.\n\n")
                         .append("Phase 1: \n")
@@ -108,7 +106,7 @@ public class ControlFragment extends Fragment {
                         .setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ((ScroggleActivity)getActivity()).resumeGame();
+                                toggleGamePause();
                                 dialog.dismiss();
                             }
                         });
@@ -138,6 +136,17 @@ public class ControlFragment extends Fragment {
         } else {
             drawable.setLevel(0);
         }
+    }
+
+    private void toggleGamePause() {
+        if (gameRunning) {
+            ((ScroggleActivity)getActivity()).pauseGame();
+        } else {
+            ((ScroggleActivity)getActivity()).resumeGame();
+        }
+        toggleButton(pauseButton, gameRunning);
+
+        gameRunning = !gameRunning;
     }
 
     public void setTimerColor(int colorId) {
