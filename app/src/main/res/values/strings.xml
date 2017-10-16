@@ -26,5 +26,6 @@
 
     <string name="game_title">Scroggle Game</string>
     <string name="new_game_btn">New Game</string>
+    <string name="game_result_title">Game Result</string>
 
 </resources>

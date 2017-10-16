@@ -1,26 +1,27 @@
 package edu.neu.madcourse.zhiyaojin.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import edu.neu.madcourse.zhiyaojin.R;
 import edu.neu.madcourse.zhiyaojin.activity.ScroggleActivity;
 
-
 public class ControlFragment extends Fragment {
 
     private TextView wordTextView;
     private TextView timerTextView;
     private TextView pointsTextView;
-    private boolean gamePaused = false;
+    private boolean gameRunning = true;
+    private boolean musicPlaying = true;
 
     public ControlFragment() {
         // Required empty public constructor
@@ -42,8 +43,8 @@ public class ControlFragment extends Fragment {
 
         ImageButton submitButton = rootView.findViewById(R.id.word_submit_btn);
         ImageButton cancelButton = rootView.findViewById(R.id.word_cancel_btn);
-        ImageButton pauseButton = rootView.findViewById(R.id.pause_btn);
-        ImageButton musicButton = rootView.findViewById(R.id.music_btn);
+        final ImageButton pauseButton = rootView.findViewById(R.id.pause_btn);
+        final ImageButton musicButton = rootView.findViewById(R.id.music_btn);
         ImageButton infoButton = rootView.findViewById(R.id.game_info_btn);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +53,7 @@ public class ControlFragment extends Fragment {
                 ((ScroggleActivity)getActivity()).submitWord();
             }
         });
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,14 +65,57 @@ public class ControlFragment extends Fragment {
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (gamePaused) {
-                    ((ScroggleActivity)getActivity()).resumeGame();
-                } else {
+                if (gameRunning) {
                     ((ScroggleActivity)getActivity()).pauseGame();
+                } else {
+                    ((ScroggleActivity)getActivity()).resumeGame();
                 }
-                gamePaused = !gamePaused;
+                toggleButton(pauseButton, gameRunning);
+
+                gameRunning = !gameRunning;
             }
         });
+
+        musicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (musicPlaying) {
+                    ((ScroggleActivity)getActivity()).pauseMusic();
+                } else {
+                    ((ScroggleActivity)getActivity()).resumeMusic();
+                }
+                toggleButton(musicButton, musicPlaying);
+                musicPlaying = !musicPlaying;
+            }
+        });
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ScroggleActivity)getActivity()).pauseGame();
+                String instructions = new StringBuilder()
+                        .append("Scroggle game has two phases.\n\n")
+                        .append("Phase 1: \n")
+                        .append("You need to find the longest word they can in each Boggle board\n\n")
+                        .append("Phase 2: \n")
+                        .append("Pick letters from each board. You can revisit grids, ")
+                        .append("but not back to back.\n\n")
+                        .append("Find as many words as you can!")
+                        .toString();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Help")
+                        .setMessage(instructions)
+                        .setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((ScroggleActivity)getActivity()).resumeGame();
+                                dialog.dismiss();
+                            }
+                        });
+                builder.create().show();
+            }
+        });
+
         return rootView;
     }
 
@@ -84,6 +129,19 @@ public class ControlFragment extends Fragment {
 
     public void updatePointsTextView(int points) {
         pointsTextView.setText(String.valueOf(points));
+    }
+
+    private void toggleButton(ImageButton button, boolean isFirstState) {
+        Drawable drawable = button.getBackground();
+        if (isFirstState) {
+            drawable.setLevel(1);
+        } else {
+            drawable.setLevel(0);
+        }
+    }
+
+    public void setTimerColor(int colorId) {
+        timerTextView.setTextColor(ContextCompat.getColor(getContext(), colorId));
     }
 
 }

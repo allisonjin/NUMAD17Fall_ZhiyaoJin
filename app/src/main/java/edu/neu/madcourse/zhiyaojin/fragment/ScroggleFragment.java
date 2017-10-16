@@ -1,5 +1,9 @@
 package edu.neu.madcourse.zhiyaojin.fragment;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -7,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.neu.madcourse.zhiyaojin.R;
 import edu.neu.madcourse.zhiyaojin.activity.ScroggleActivity;
@@ -31,22 +39,24 @@ public class ScroggleFragment extends Fragment {
     private final static String PHASE_1 = "phase1";
     private final static String PHASE_2 = "phase2";
 
-    private final DictionaryDBHelper dbHelper;
-    private final BoggleBoardGenerator boardGenerator;
+    private MediaPlayer mMediaPlayer;
+    private final DictionaryDBHelper mDBHelper;
+    private final BoggleBoardGenerator mBoardGenerator;
 
     private Tile mEntireBoard = new Tile(this);
     private Tile[] mLargeTiles = new Tile[9];
     private Tile[][] mSmallTiles = new Tile[9][9];
     private String word = "";
     private int totalPoints = 0;
+    List<String> wordsFound = new ArrayList<>();
     private int mLastLarge;
     private int mLastSmall;
 
     private String phase = PHASE_1;
 
     public ScroggleFragment() {
-        dbHelper = new DictionaryDBHelper(getContext());
-        boardGenerator = new BoggleBoardGenerator(dbHelper, BOARD_SIZE);
+        mDBHelper = new DictionaryDBHelper(getContext());
+        mBoardGenerator = new BoggleBoardGenerator(mDBHelper, BOARD_SIZE);
     }
 
     @Override
@@ -99,7 +109,7 @@ public class ScroggleFragment extends Fragment {
         // Create all the tiles
         for (int large = 0; large < 9; large++) {
             mLargeTiles[large] = new Tile(this);
-            char[] board = boardGenerator.getRandomBoard();
+            char[] board = mBoardGenerator.getRandomBoard();
             for (int small = 0; small < 9; small++) {
                 Tile tile = new Tile(this);
                 tile.setValue(String.valueOf(board[small]));
@@ -130,12 +140,21 @@ public class ScroggleFragment extends Fragment {
                     public void onClick(View view) {
                         if (nextMoveAvailable(fLarge, fSmall)) {
                             makeMove(fLarge, fSmall);
+                            playClickSound();
                         }
                     }
                 });
                 // ...
             }
         }
+    }
+
+    public List<String> getWordsFound() {
+        return wordsFound;
+    }
+
+    public int getScore() {
+        return totalPoints;
     }
 
     // refactoring
@@ -197,10 +216,6 @@ public class ScroggleFragment extends Fragment {
         mLastSmall = small;
         updateAllTiles();
         updateWordDisplay();
-
-        if (phase == PHASE_2) {
-            tile.enable();
-        }
     }
 
     private void disableFromMove(int large, int small) {
@@ -221,7 +236,8 @@ public class ScroggleFragment extends Fragment {
     private void disableFromMovePhase2(int large, int small) {
         enableTiles();
         for (int i = 0; i < 9; i++) {
-            if (i != small) {
+            Tile tile = mSmallTiles[large][i];
+            if (i != small && !tile.isSelected()) {
                 disableTiles(mSmallTiles[large][i]);
             }
         }
@@ -247,8 +263,11 @@ public class ScroggleFragment extends Fragment {
         if (word.length() == 0) {
             return;
         }
-        if (dbHelper.wordExists(word)) {
+        if (mDBHelper.wordExists(word)) {
+            wordsFound.add(word);
             totalPoints += getPointsOfWord(word);
+            playWordFoundSound();
+            showMessage("Word Found!");
             if (phase == PHASE_2) {
                 removeSelectedSmallTiles();
             } else {
@@ -257,6 +276,8 @@ public class ScroggleFragment extends Fragment {
             }
         } else {
             totalPoints = totalPoints > 5 ? totalPoints - 5 : 0;
+            showMessage(word.toUpperCase() + " Is Not A Word!");
+            playWrongWordSound();
         }
         clearSelectedWord();
         updatePointsDisplay();
@@ -312,6 +333,37 @@ public class ScroggleFragment extends Fragment {
                 if (tile.isSelected()) {
                     tile.blank();
                 }
+            }
+        }
+    }
+
+    private void showMessage(String message) {
+        Context context = getActivity();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, message, duration);
+        toast.show();
+    }
+
+    private void playClickSound() {
+        mMediaPlayer = MediaPlayer.create(getContext(), R.raw.letter_selected_sound);
+        mMediaPlayer.start();
+    }
+
+    private void playWordFoundSound() {
+        mMediaPlayer = MediaPlayer.create(getContext(), R.raw.word_found_sound);
+        mMediaPlayer.start();
+    }
+
+    private void playWrongWordSound() {
+        mMediaPlayer = MediaPlayer.create(getContext(), R.raw.word_wrong_sound);
+        mMediaPlayer.setVolume(2.0f, 2.0f);
+        mMediaPlayer.start();
+    }
+
+    public void toggleTilesVisibility() {
+        for (Tile[] tiles : mSmallTiles) {
+            for (Tile tile : tiles) {
+                tile.toggleVisibility();
             }
         }
     }

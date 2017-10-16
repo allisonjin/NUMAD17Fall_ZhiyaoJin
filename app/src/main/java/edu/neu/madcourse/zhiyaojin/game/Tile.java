@@ -1,5 +1,6 @@
 package edu.neu.madcourse.zhiyaojin.game;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ public class Tile {
     private View mView;
     private String value = "";
     private Tile[] mSubTiles;
+    private boolean isVisible;
 
     public Tile(ScroggleFragment scroggle) {
         this.mScroggle = scroggle;
@@ -124,6 +126,17 @@ public class Tile {
                 level = LEVEL_UNSELECTED;
         }
         return level;
+    }
+
+    public void toggleVisibility() {
+        if (mView instanceof Button) {
+            if (isVisible) {
+                ((Button) mView).setTextColor(Color.parseColor("#000000"));
+            } else {
+                ((Button) mView).setTextColor(Color.parseColor("#00000000"));
+            }
+            isVisible = !isVisible;
+        }
     }
 
 }

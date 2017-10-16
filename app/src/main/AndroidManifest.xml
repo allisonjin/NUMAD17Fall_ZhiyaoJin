@@ -21,7 +21,8 @@
         <activity android:name=".activity.DisplayAboutActivity" />
         <activity android:name=".activity.DictionaryActivity" />
         <activity android:name=".activity.GameMenuActivity" />
-        <activity android:name=".activity.ScroggleActivity"></activity>
+        <activity android:name=".activity.ScroggleActivity" />
+        <activity android:name=".activity.GameResultActivity" />
     </application>
 
 </manifest>

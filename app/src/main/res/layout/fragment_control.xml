@@ -17,16 +17,16 @@
             android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:textSize="20sp" />
+            android:paddingRight="20dp"
+            android:textSize="@dimen/control_text_size"
+            android:textColor="@color/dark_border_color" />
 
         <ImageButton
             android:id="@+id/pause_btn"
             android:layout_width="@dimen/control_btn_size"
             android:layout_height="@dimen/control_btn_size"
-            android:layout_marginLeft="@dimen/control_btn_margin"
             android:layout_marginRight="@dimen/control_btn_margin"
-            android:background="@drawable/icon_pausebutton_50" />
+            android:background="@drawable/game_pause_resume_btn" />
 
         <ImageButton
             android:id="@+id/music_btn"
@@ -34,14 +34,13 @@
             android:layout_height="@dimen/control_btn_size"
             android:layout_marginLeft="@dimen/control_btn_margin"
             android:layout_marginRight="@dimen/control_btn_margin"
-            android:background="@drawable/icon_audio_48" />
+            android:background="@drawable/music_btn" />
 
         <ImageButton
             android:id="@+id/game_info_btn"
             android:layout_width="@dimen/control_btn_size"
             android:layout_height="@dimen/control_btn_size"
             android:layout_marginLeft="@dimen/control_btn_margin"
-            android:layout_marginRight="@dimen/control_btn_margin"
             android:background="@drawable/icon_info_48" />
 
         <TextView
@@ -49,23 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/words_found"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_below="@id/top_control"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:textSize="@dimen/control_text_size"
+            android:textColor="@color/dark_border_color" />
 
     </LinearLayout>
 
@@ -74,14 +58,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/word_padding"
-        android:layout_below="@id/words_found"
+        android:layout_below="@id/top_control"
         android:layout_centerHorizontal="true">
 
         <TextView
             android:id="@+id/word"
-            android:layout_width="120dp"
-            android:layout_height="25dp"
-            android:paddingTop="2dp"
+            android:layout_width="@dimen/word_width"
+            android:layout_height="@dimen/word_height"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="4dp"
             android:textAlignment="center"
             android:background="@color/gray_color" />
 
