@@ -9,7 +9,7 @@
 <resources>
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
-    <dimen name="tile_size">35dp</dimen>
+    <dimen name="tile_size">30dp</dimen>
     <dimen name="tile_margin">0dp</dimen>
     <dimen name="tile_padding">3dp</dimen>
     <dimen name="game_padding">10dp</dimen>
@@ -25,8 +25,9 @@
     <dimen name="menu_padding">10dp</dimen>
     <dimen name="menu_space">10dp</dimen>
     <dimen name="menu_text_size">32sp</dimen>
-    <dimen name="menu_button_margin">4dp</dimen>
+    <dimen name="menu_button_margin">2dp</dimen>
     <dimen name="menu_button_padding">10dp</dimen>
+    <dimen name="menu_button_width">180dp</dimen>
 
     <dimen name="control_btn_size">40dp</dimen>
     <dimen name="control_btn_margin">10dp</dimen>
@@ -34,4 +35,5 @@
     <dimen name="word_width">150dp</dimen>
     <dimen name="word_height">30dp</dimen>
     <dimen name="control_text_size">24sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

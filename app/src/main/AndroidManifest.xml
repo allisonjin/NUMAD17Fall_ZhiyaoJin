@@ -23,6 +23,22 @@
         <activity android:name=".activity.GameMenuActivity" />
         <activity android:name=".activity.ScroggleActivity" />
         <activity android:name=".activity.GameResultActivity" />
+        <activity android:name=".activity.HighScoresActivity" />
+
+        <service android:name=".service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".activity.CongratsDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
     </application>
 
 </manifest>

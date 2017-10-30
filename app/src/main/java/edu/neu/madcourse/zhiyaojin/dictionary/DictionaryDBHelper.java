@@ -62,8 +62,9 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         OutputStream os = null;
         try {
             try {
+                Log.i("copydb", "test");
                 is = mContext.getAssets().open(DB_NAME);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 createDBFromDictionary();
             }
             os = new FileOutputStream(dbFile);

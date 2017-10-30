@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import edu.neu.madcourse.zhiyaojin.R;
 import edu.neu.madcourse.zhiyaojin.activity.ScroggleActivity;
+import edu.neu.madcourse.zhiyaojin.entity.GameInfo;
 
 public class ControlFragment extends Fragment {
 
@@ -25,6 +27,8 @@ public class ControlFragment extends Fragment {
     private ImageButton infoButton;
     private boolean gameRunning = true;
     private boolean musicPlaying = true;
+
+    private GameInfo mGameInfo;
 
     public ControlFragment() {
         // Required empty public constructor
@@ -117,6 +121,10 @@ public class ControlFragment extends Fragment {
         return rootView;
     }
 
+    public void setGameInfo(GameInfo gameInfo) {
+        mGameInfo = gameInfo;
+    }
+
     public void updateWordTextView(String newWord) {
         wordTextView.setText(newWord.toUpperCase());
     }
@@ -125,8 +133,8 @@ public class ControlFragment extends Fragment {
         timerTextView.setText(timeLeft);
     }
 
-    public void updatePointsTextView(int points) {
-        pointsTextView.setText(String.valueOf(points));
+    public void updatePointsTextView() {
+        pointsTextView.setText(String.valueOf(mGameInfo.getScore()));
     }
 
     private void toggleButton(ImageButton button, boolean isFirstState) {

@@ -4,24 +4,40 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context="edu.neu.madcourse.zhiyaojin.fragment.GameMenuFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="@string/game_title"
         android:textSize="@dimen/menu_text_size" />
     
     <Button
         android:id="@+id/new_game_btn"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/menu_button_width"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/menu_button_margin"
-        android:text="@string/new_game_btn"/>
+        android:text="@string/new_game_btn" />
+    
+    <Button
+        android:id="@+id/edit_username_btn"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:text="@string/edit_username_btn" />
+
+    <Button
+        android:id="@+id/high_scores_btn"
+        android:layout_width="@dimen/menu_button_width"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:text="@string/high_scores_btn" />
 
     <Button
         android:id="@+id/game_acknowledgment"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/menu_button_width"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/menu_button_margin"
         android:text="@string/acknowledgment_btn"/>

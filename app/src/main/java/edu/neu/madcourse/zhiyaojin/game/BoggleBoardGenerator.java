@@ -13,12 +13,20 @@ public class BoggleBoardGenerator {
 
     private final int size;
     private final List<String> words;
+    private final List<int[]> boards;
     private final Random random;
 
     public BoggleBoardGenerator(DictionaryDBHelper dbHelper, int size) {
         this.size = size;
-        words = dbHelper.getWordsByLength(size * size);
+        int n = size * size;
+        words = dbHelper.getWordsByLength(n);
         random = new Random();
+
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = i;
+        }
+        boards = getALlLegalBoards(nums);
     }
 
     private <T> T randomElement(List<T> list) {
@@ -29,47 +37,52 @@ public class BoggleBoardGenerator {
     public char[] getRandomBoard() {
         String word = randomElement(words);
         Log.i("word", word);
-        List<char[]> boards = getAllBoards(word);
-        char[] board = randomElement(boards);
+        int[] numBoard = randomElement(boards);
+        char[] board = new char[numBoard.length];
+        for (int i = 0; i < numBoard.length; i++) {
+            board[i] = word.charAt(numBoard[i]);
+        }
         return board;
     }
 
-    private List<char[]> getAllBoards(String word) {
-        List<char[]> boards = new ArrayList<>();
-        char[][] board = new char[size][size];
-        for (char[] chs : board) {
-            Arrays.fill(chs, '#');
+
+    private List<int[]> getALlLegalBoards(int[] nums) {
+        List<int[]> boards = new ArrayList<>();
+        int[][] board = new int[size][size];
+        for (int[] row : board) {
+            Arrays.fill(row, -1);
         }
         int x = random.nextInt(size);
         int y = random.nextInt(size);
-        dps(word, x, y, 0, board, boards);
+        dfs(nums, x, y, 0, board, boards);
         return boards;
     }
 
-    private void dps(String word, int x, int y, int index, char[][] board,
-                        List<char[]> boards) {
-        if (x < 0 || x >= size || y < 0 || y >= size || board[x][y] != '#') {
+    // nums stores the indexes of letters in a word
+    private void dfs(int[] nums, int x, int y, int index, int[][] board,
+                     List<int[]> boards) {
+        if (x < 0 || x >= size || y < 0 || y >= size || board[x][y] != -1) {
             return;
         }
-        board[x][y] = word.charAt(index);
-        if (index == word.length() - 1) {
+        board[x][y] = nums[index];
+        if (index == nums.length - 1) {
             // deep copy
-            char[] newBoard = new char[size * size];
+            int[] newBoard = new int[size * size];
             for (int i = 0; i < size; i++) {
                 System.arraycopy(board[i], 0, newBoard, size * i, size);
             }
             boards.add(newBoard);
-            board[x][y] = '#';
+            board[x][y] = -1;
             return;
         }
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (!(i == 0 && j == 0)) {
-                    dps(word, x + i, y + j, index + 1, board, boards);
+                    dfs(nums, x + i, y + j, index + 1, board, boards);
                 }
             }
         }
-        board[x][y] = '#';
+        board[x][y] = -1;
     }
 
 }

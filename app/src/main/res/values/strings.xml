@@ -22,11 +22,27 @@
         /blob/master/samples/SearchableDictionary/src/com/example/android/searchabledict
         /DictionaryDatabase.java</string>
     <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
 
     <string name="game_title">Scroggle Game</string>
     <string name="new_game_btn">New Game</string>
     <string name="game_result_title">Game Result</string>
     <string name="btn_replay">Replay</string>
     <string name="go_to_game_menu">Game Menu</string>
+
+    <string name="edit_username_btn">Edit Username</string>
+    <string name="edit_username_title">Edit Your Username</string>
+
+    <string name="high_scores_btn">High Scores</string>
+    <string name="leader_board_btn">Leader Board</string>
+    <string name="score_board_btn">Score Board</string>
+    <string name="game_username">Username: </string>
+    <string name="game_score">Final Score: </string>
+    <string name="game_word_and_score">Word with Highest Score: </string>
+    <string name="game_date">Game Played: </string>
+
+    <string name="congrats_btn">Congrats!</string>
+    <string name="skip_btn">Skip</string>
+    <string name="title_activity_congrats_dialog">CongratsDialogActivity</string>
 
 </resources>
